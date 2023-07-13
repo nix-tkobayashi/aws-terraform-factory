@@ -399,6 +399,37 @@ resource "aws_cloudwatch_metric_alarm" "vpc_changes_alarm" {
 }
 
 /**
+ * サポートされていない自動チェック
+ * Security Hub は、CIS AWS Foundations Benchmark v1.4.0 の自動チェックに依存する以下の要件をサポートしていません。
+ *
+ * 4.15 - AWS Organizations の変更に対するログメトリクスフィルターとアラームが存在するようにする
+ */
+resource "aws_cloudwatch_log_metric_filter" "organizations_changes_metric_filter" {
+  name           = "OrganizationsChangesMetricFilter"
+  pattern        = "{ $.eventSource = organizations.amazonaws.com && ($.eventName = CreateOrganization || $.eventName = DeleteOrganization || $.eventName = CreateAccount || $.eventName = InviteAccountToOrganization || $.eventName = RemoveAccountFromOrganization || $.eventName = CreateOrganizationalUnit || $.eventName = DeleteOrganizationalUnit || $.eventName = MoveAccount || $.eventName = EnableAWSServiceAccess || $.eventName = DisableAWSServiceAccess || $.eventName = CreatePolicy || $.eventName = DeletePolicy || $.eventName = AttachPolicy || $.eventName = DetachPolicy) }"
+  log_group_name = var.cloudtrail_log_group_name
+
+  metric_transformation {
+    namespace = "CloudTrailMetrics"
+    name      = "OrganizationsChangesCount"
+    value     = "1"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "organizations_changes_alarm" {
+  alarm_name          = "CloudTrailOrganizationsChanges"
+  alarm_description   = "Alarm for AWS Organizations changes"
+  alarm_actions       = [aws_sns_topic.alarm_notification.arn]
+  metric_name         = "OrganizationsChangesCount"
+  namespace           = "CloudTrailMetrics"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = 1
+  period              = "300"
+  statistic           = "SampleCount"
+  threshold           = "1"
+}
+
+/**
  * ★
  */
 /*
