@@ -6,21 +6,23 @@
 
 - AWSのCloudTrailログから特定のイベントをフィルタリングし、それらのイベントを監視します。具体的には、以下のようなイベントが監視対象となっています：
 
-  1. ルートユーザーの使用
-  2. APIの認証エラー
-  3. MFAを使用せずにコンソールにサインインする行為
-  4. IAMポリシーの変更
-  5. CloudTrailの設定変更
-  6. マネジメントコンソールの認証失敗
-  7. KMSキーの無効化またはスケジュールされた削除
-  8. S3バケットポリシーの変更
-  9. AWS Configの設定変更
-  10. セキュリティグループの変更
-  11. ネットワークアクセスコントロールリスト（NACL）の変更
-  12. ネットワークゲートウェイの変更
-  13. ルートテーブルの変更
-  14. VPCの変更
-  15. AWS Organizationsの変更
+|No|説明|アラーム名|
+|---|---|---|
+|1|ルートユーザーの使用|RootUserActivity|
+|2|APIの認証エラー|CloudTrailAuthorizationFailures|
+|3|MFAを使用せずにコンソールにサインインする行為|ConsoleSigninWithoutMFA|
+|4|IAMポリシーの変更|IAMPolicyChangesMetricFilter|
+|5|CloudTrailの設定変更|CloudTrailChanges|
+|6|マネジメントコンソールの認証失敗|CloudTrailConsoleSignInFailures|
+|7|KMSキーの無効化またはスケジュールされた削除|CIS3.7_KmsDisabledOrScheduledDeletion|
+|8|S3バケットポリシーの変更|S3BucketPolicyChanges|
+|9|AWS Configの設定変更|CIS3.9_AWSConfigChanges|
+|10|セキュリティグループの変更|CloudTrailSecurityGroupChanges|
+|11|ネットワークアクセスコントロールリスト（NACL）の変更|CloudTrailNetworkAclChanges|
+|12|ネットワークゲートウェイの変更|CloudTrailGatewayChanges|
+|13|ルートテーブルの変更|RouteTableChanges|
+|14|VPCの変更|CloudTrailVpcChanges|
+|15|AWS Organizationsの変更|CloudTrailOrganizationsChanges|
 
 - 監視対象のイベントが検出された場合に、AWSのSNS (Simple Notification Service) を使用して通知を送信します。
 
