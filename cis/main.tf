@@ -407,7 +407,7 @@ resource "aws_cloudwatch_metric_alarm" "vpc_changes_alarm" {
 resource "aws_cloudwatch_log_metric_filter" "organizations_changes_metric_filter" {
   name           = "OrganizationsChangesMetricFilter"
   pattern        = "{ $.eventSource = organizations.amazonaws.com && ($.eventName = CreateOrganization || $.eventName = DeleteOrganization || $.eventName = CreateAccount || $.eventName = InviteAccountToOrganization || $.eventName = RemoveAccountFromOrganization || $.eventName = CreateOrganizationalUnit || $.eventName = DeleteOrganizationalUnit || $.eventName = MoveAccount || $.eventName = EnableAWSServiceAccess || $.eventName = DisableAWSServiceAccess || $.eventName = CreatePolicy || $.eventName = DeletePolicy || $.eventName = AttachPolicy || $.eventName = DetachPolicy) }"
-  log_group_name = var.cloudtrail_log_group_name
+  log_group_name = var.log_group_name
 
   metric_transformation {
     namespace = "CloudTrailMetrics"
